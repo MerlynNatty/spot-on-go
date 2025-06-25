@@ -1,12 +1,39 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState } from 'react';
+import MapView from '@/components/MapView';
+import ReservationView from '@/components/ReservationView';
+import PaymentView from '@/components/PaymentView';
+
+type Screen = 'map' | 'reservation' | 'payment';
 
 const Index = () => {
+  const [currentScreen, setCurrentScreen] = useState<Screen>('map');
+
+  const navigateToReservation = () => setCurrentScreen('reservation');
+  const navigateToPayment = () => setCurrentScreen('payment');
+  const navigateToMap = () => setCurrentScreen('map');
+  const navigateBack = () => {
+    if (currentScreen === 'payment') {
+      setCurrentScreen('reservation');
+    } else if (currentScreen === 'reservation') {
+      setCurrentScreen('map');
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="w-full max-w-md mx-auto bg-white min-h-screen shadow-xl">
+      {currentScreen === 'map' && (
+        <MapView onNavigateToReservation={navigateToReservation} />
+      )}
+      {currentScreen === 'reservation' && (
+        <ReservationView 
+          onNavigateToPayment={navigateToPayment}
+          onNavigateBack={navigateBack}
+        />
+      )}
+      {currentScreen === 'payment' && (
+        <PaymentView onNavigateBack={navigateBack} />
+      )}
     </div>
   );
 };
