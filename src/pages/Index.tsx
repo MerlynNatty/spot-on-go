@@ -1,10 +1,12 @@
-
 import React, { useState } from 'react';
 import MapView from '@/components/MapView';
 import ReservationView from '@/components/ReservationView';
 import PaymentView from '@/components/PaymentView';
 
-type Screen = 'map' | 'reservation' | 'payment';
+// Import the new PaymentSuccess page (to be created)
+import PaymentSuccess from './PaymentSuccess';
+
+type Screen = 'map' | 'reservation' | 'payment' | 'paymentSuccess';
 
 const Index = () => {
   const [currentScreen, setCurrentScreen] = useState<Screen>('map');
@@ -19,6 +21,7 @@ const Index = () => {
       setCurrentScreen('map');
     }
   };
+  const handlePaymentSuccess = () => setCurrentScreen('paymentSuccess');
 
   return (
     <div className="w-full max-w-md mx-auto bg-white min-h-screen shadow-xl">
@@ -32,7 +35,10 @@ const Index = () => {
         />
       )}
       {currentScreen === 'payment' && (
-        <PaymentView onNavigateBack={navigateBack} />
+        <PaymentView onNavigateBack={navigateBack} onPaymentSuccess={handlePaymentSuccess} />
+      )}
+      {currentScreen === 'paymentSuccess' && (
+        <PaymentSuccess onGoHome={navigateToMap} />
       )}
     </div>
   );
